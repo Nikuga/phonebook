@@ -40,5 +40,5 @@ unsigned int BKDRHash(char *str)
     while (*str) {
         hash = hash*seed + (*str++);
     }
-    return (hash & 0x7FFFFFFF) % HASH_TABLE_SIZE;
+    return (hash % HASH_TABLE_SIZE);
 }
