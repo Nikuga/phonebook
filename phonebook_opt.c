@@ -7,12 +7,10 @@
 
 entry *findName(char lastname[], entry *pHead)
 {
-    unsigned int hash_value = BKDRHash(lastname);
-    entry *pHead_hash = HashTable[hash_value];
-    while (pHead_hash != NULL) {
-        if (strcasecmp(lastname, pHead_hash->lastName) == 0)
-            return pHead_hash;
-        pHead_hash = pHead_hash->pNext;
+    while (pHead != NULL) {
+        if (strcasecmp(lastname, pHead->lastName) == 0)
+            return pHead;
+        pHead = pHead->pNext;
     }
     return NULL;
 }
@@ -20,25 +18,11 @@ entry *findName(char lastname[], entry *pHead)
 entry *append(char lastName[], entry *e)
 {
     /* allocate memory for the new entry and put lastName */
-    unsigned int hash_value = BKDRHash(lastName);
-    entry *tmp = (entry *) malloc(sizeof(entry));
-    strcpy(tmp->lastName, lastName);
-    if(HashTable[hash_value]==NULL) {
-        HashTable[hash_value] = tmp;
-        HashTable[hash_value]->pNext = NULL;
-    } else {
-        tmp->pNext = HashTable[hash_value];
-        HashTable[hash_value] = tmp;
-    }
+    e->pNext = (entry *) malloc(sizeof(entry));
+    e = e->pNext;
+    strcpy(e->lastName, lastName);
+    e->pNext = NULL;
 
     return e;
 }
 
-unsigned int BKDRHash(char *str)
-{
-    unsigned int seed = 31, hash = 0;
-    while (*str) {
-        hash = hash*seed + (*str++);
-    }
-    return (hash % HASH_TABLE_SIZE);
-}
